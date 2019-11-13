@@ -29,17 +29,31 @@ mkdir -p "$REPORT_DIR"
 V4_PID="9999999"
 V6_PID="9999999"
 
+echo "$(date) Starting IPv4 monitor" >>"$REPORT_DIR/ip_v4_MODE.txt"
+echo "$(date) Starting IPv6 monitor" >>"$REPORT_DIR/ip_v6_MODE.txt"
+
 while true
 do
+
+   #ipv4
    ps x|grep -v grep|grep "$V4_PID" >/dev/null
    EXITCODE="$?"
    if [ "$EXITCODE" -gt 0 ]; then
    	   echo -n "$(date): (re)starting ssh 4 connection, "
-  	  ./ssh_script.sh "$SSH_SERVER" "4" "$REPORT_DIR" >$REPORT_DIR/log_ssh_ipv4.txt 2>&1 &
+  	  ./ssh_script.sh "$SSH_SERVER" "4" "$REPORT_DIR" >>$REPORT_DIR/log_ssh_ipv4.txt 2>&1 &
   	  V4_PID="$!"
   	  echo "PID is $V4_PID"
    fi
 
+  #ipv6
+   ps x|grep -v grep|grep "$V6_PID" >/dev/null
+   EXITCODE="$?"
+   if [ "$EXITCODE" -gt 0 ]; then
+   	   echo -n "$(date): (re)starting ssh 6 connection, "
+  	  ./ssh_script.sh "$SSH_SERVER" "6" "$REPORT_DIR" >>$REPORT_DIR/log_ssh_ipv6.txt 2>&1 &
+  	  V6_PID="$!"
+  	  echo "PID is $V6_PID"
+   fi
 
   sleep 3
 done	
