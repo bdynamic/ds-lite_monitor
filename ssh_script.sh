@@ -11,7 +11,7 @@ do
     echo "echo Connected"
     
     sleep 10
-done | ssh "-$IP_MODE" "$SERVER" #"bash -s"
+done | ssh "-t" "-$IP_MODE" "$SERVER" "bash -l"
 
 ENDTIME=$(date +%s)
 ENDDTIMEH=$(date +%Y%m%d_%H%M%S)
